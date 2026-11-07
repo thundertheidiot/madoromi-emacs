@@ -1,4 +1,4 @@
-;;; batppuccin-latte-theme.el --- Batppuccin theme (Latte variant) -*- lexical-binding: t; -*-
+;;; madoromi-fuyu-hiru-theme.el --- Madoromi fuyu-hiru theme -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2026 Bozhidar Batsov
 
@@ -19,16 +19,20 @@
 
 ;;; Commentary:
 
-;; The "Latte" variant of Batppuccin -- the light flavor.
-;; See `batppuccin.el' for the shared infrastructure.
+;; The fuyu day / light Madoromi palette.
+;; Derived from Batppuccin; colour design by samhain / the-moonwitch.
+;; See `madoromi.el' for the shared infrastructure.
 
 ;;; Code:
 
-(require 'batppuccin)
+(require 'madoromi)
 
-(deftheme batppuccin-latte "A soothing pastel light theme.")
+(deftheme madoromi-fuyu-hiru "Madoromi fuyu, day / light.")
 
-(batppuccin--apply-theme 'batppuccin-latte batppuccin-latte-colors-alist)
+(put 'madoromi-fuyu-hiru 'theme-properties
+     '(:kind color-scheme :background-mode light :family madoromi))
+
+(madoromi--apply-theme 'madoromi-fuyu-hiru (madoromi-palette 'fuyu-hiru))
 
 ;;;###autoload
 (and load-file-name
@@ -37,13 +41,13 @@
                   (file-name-as-directory
                    (file-name-directory load-file-name))))
 
-(provide-theme 'batppuccin-latte)
+(provide-theme 'madoromi-fuyu-hiru)
 
-(provide 'batppuccin-latte-theme)
+(provide 'madoromi-fuyu-hiru-theme)
 
 ;; Local Variables:
 ;; no-byte-compile: t
 ;; indent-tabs-mode: nil
 ;; End:
 
-;;; batppuccin-latte-theme.el ends here
+;;; madoromi-fuyu-hiru-theme.el ends here

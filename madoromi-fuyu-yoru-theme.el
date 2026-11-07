@@ -1,4 +1,4 @@
-;;; batppuccin-frappe-theme.el --- Batppuccin theme (Frappe variant) -*- lexical-binding: t; -*-
+;;; madoromi-fuyu-yoru-theme.el --- Madoromi fuyu-yoru theme -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2026 Bozhidar Batsov
 
@@ -19,16 +19,20 @@
 
 ;;; Commentary:
 
-;; The "Frappe" variant of Batppuccin -- medium-dark flavor.
-;; See `batppuccin.el' for the shared infrastructure.
+;; The fuyu night / dark Madoromi palette.
+;; Derived from Batppuccin; colour design by samhain / the-moonwitch.
+;; See `madoromi.el' for the shared infrastructure.
 
 ;;; Code:
 
-(require 'batppuccin)
+(require 'madoromi)
 
-(deftheme batppuccin-frappe "A soothing pastel medium-dark theme.")
+(deftheme madoromi-fuyu-yoru "Madoromi fuyu, night / dark.")
 
-(batppuccin--apply-theme 'batppuccin-frappe batppuccin-frappe-colors-alist)
+(put 'madoromi-fuyu-yoru 'theme-properties
+     '(:kind color-scheme :background-mode dark :family madoromi))
+
+(madoromi--apply-theme 'madoromi-fuyu-yoru (madoromi-palette 'fuyu-yoru))
 
 ;;;###autoload
 (and load-file-name
@@ -37,13 +41,13 @@
                   (file-name-as-directory
                    (file-name-directory load-file-name))))
 
-(provide-theme 'batppuccin-frappe)
+(provide-theme 'madoromi-fuyu-yoru)
 
-(provide 'batppuccin-frappe-theme)
+(provide 'madoromi-fuyu-yoru-theme)
 
 ;; Local Variables:
 ;; no-byte-compile: t
 ;; indent-tabs-mode: nil
 ;; End:
 
-;;; batppuccin-frappe-theme.el ends here
+;;; madoromi-fuyu-yoru-theme.el ends here

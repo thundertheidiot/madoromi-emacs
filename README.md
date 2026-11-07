@@ -1,257 +1,37 @@
-# Batppuccin
+# [madoromi](https://madoromi.moonwit.ch/#palettes) for Emacs 微睡
 
-[![MELPA](https://melpa.org/packages/batppuccin-badge.svg)](https://melpa.org/#/batppuccin)
-[![Build Status](https://github.com/bbatsov/batppuccin-emacs/workflows/CI/badge.svg)](https://github.com/bbatsov/batppuccin-emacs/actions?query=workflow%3ACI)
+![vibecoded](https://codeberg.org/ethical-foss/ai-free-foss-alternatives/media/branch/main/badges/vibecoded.svg)
 
-Batppuccin is an opinionated Emacs port of the [Catppuccin](https://github.com/catppuccin/catppuccin) color scheme. It aims to follow the official Catppuccin style guide closely while being structured idiomatically for Emacs.
+Colour themes made from fountain pen inks
+Eight themes: each season, by day and by night.
 
-The name is a play on my last name ([Batsov](https://batsov.com/)) + Catppuccin (cat -> bat). So, that's essentially `@bbatsov`'s take on Catppuccin.[^1]
+Derived from the wonderful [Batppuccin](https://github.com/bbatsov/batppuccin-emacs) by bbatsov, go support his work.
 
-## Why Another Catppuccin Theme?
+This is 100% vibecoded, I wanted another theme for my Emacs at 00:22 and GPT made it happen. Do not try to contribute, if you have genuine interest in doing this properly, I would recommend forking another base and actually thinking about what you're doing.
 
-The [official catppuccin/emacs](https://github.com/catppuccin/emacs) port has some fundamental issues that are hard to fix incrementally:
+Refer to the original batppuccin readme or the code for more information.
 
-### Architectural Problems
+Requires Emacs 27.1 or newer.
 
-- Registers a single `catppuccin` theme and switches flavors via a global variable + reload function. This breaks standard `load-theme` workflows, theme-switching packages like `circadian.el`, and any tooling that expects one theme = one entry in `custom-theme-load-path`. Batppuccin defines four proper themes (`batppuccin-mocha`, `batppuccin-latte`, etc.) that work with `load-theme` out of the box.
-- Loads color definitions from an external file using `load-file-name`, which is nil in certain `load-theme` code paths (e.g., when Emacs hasn't marked the theme as safe yet). This causes the theme to fail to load entirely for some users.
-- No semantic color layer, so faces reference raw palette colors directly, which makes it hard to reason about color assignments or adjust them systematically.
+## Themes
 
-I think this is partly because the official Emacs port uses Catppuccin's [Whiskers](https://github.com/catppuccin/toolbox/tree/main/whiskers) template tool to generate the Elisp from a `.tera` template. That's great for keeping ports in sync across editors, but it means the generated code doesn't follow Emacs conventions. It doesn't sit well with me.
+| Season    | Day / light           | Night / dark          |
+|-----------|-----------------------|-----------------------|
+| Spring 春 | `madoromi-haru-hiru`  | `madoromi-haru-yoru`  |
+| Summer 夏 | `madoromi-natsu-hiru` | `madoromi-natsu-yoru` |
+| Autumn 秋 | `madoromi-aki-hiru`   | `madoromi-aki-yoru`   |
+| Winter 冬 | `madoromi-fuyu-hiru`  | `madoromi-fuyu-yoru`  |
 
-### Style Guide Deviations
+`M-x madoromi-select` switches between them; `M-x madoromi-reload`
+reapplies options.
 
-- `font-lock-variable-name-face` is set to the default text color, making variables indistinguishable from surrounding text. The style guide assigns distinct colors to variables and properties.
-- All `outline-*` levels use the same blue, so org-mode headings and any outline-based hierarchy look flat. The style guide specifies a rainbow cycle (red, peach, yellow, green, sapphire, lavender).
-- `org-block` forces a green foreground on all unstyled code inside source blocks, instead of inheriting the default text color.
-- Search match highlighting uses aggressive red backgrounds where the style guide calls for teal.
-- Minibuffer prompt uses a subdued gray (`subtext0`) instead of a prominent color.
+## Credits and licence
 
-### Placeholder Colors in Production
+Emacs interface is under GPL-3.0-or-later (see `COPYING`). Madoromi's palette data is MPL-2.0, it's license is available in `data/MPL-2.0.txt`.
 
-Multiple faces (dired+, diredfl, tree-sitter, whitespace, helm) are set to `#ff00ff` magenta as a "TODO" placeholder. These show up as literal hot pink in real usage.
+Palette data and semantic colour design: madoromi, by samhain
+https://github.com/the-moonwitch/madoromi
+Palette json from commit `f8bcc5aa1ec3f731fcba9471be7caa5df1ab5695`
 
-### Missing Face Coverage
-
-No support for vertico, marginalia, embark, transient, flycheck, doom-modeline, cider, corfu, or several other widely-used packages.
-
-## Approach
-
-Batppuccin follows the conventions established in [zenburn-emacs](https://github.com/bbatsov/zenburn-emacs) and [emacs-tokyo-night-theme](https://github.com/bbatsov/emacs-tokyo-night-theme):
-
-- One theme file per flavor. Each variant (`batppuccin-mocha-theme.el`, `batppuccin-latte-theme.el`, etc.) is a thin wrapper that loads the shared infrastructure and applies its palette, so standard Emacs theme machinery works without any special glue.
-- The shared infrastructure lives in `batppuccin.el`: color palettes for all four flavors, the face application function, and a `defcustom` for user color overrides. Adding a new variant means a color alist and a ~10-line wrapper.
-- All 26 canonical Catppuccin colors with exact hex values from the spec, plus derived colors for diff backgrounds, selection, cursor line, and the heading rainbow cycle.
-- Syntax highlighting follows the Catppuccin style guide (mauve for keywords, green for strings, blue for functions, peach for constants, sky for operators, yellow for types, overlay2 for comments, rosewater for the cursor), and so does the editor UI (lavender for active line numbers, teal for search backgrounds, red/green/blue at low opacity for diffs).
-- Broad face coverage out of the box: built-in Emacs faces plus magit, vertico, corfu, marginalia, embark, orderless, consult, transient, flycheck, flymake, cider, company, evil, mu4e, notmuch, doom-modeline, treemacs, web-mode, and more.
-
-## Installation
-
-### MELPA
-
-Batppuccin is available on [MELPA](https://melpa.org/#/batppuccin). Assuming
-you've [configured MELPA](https://melpa.org/#/getting-started) as a package
-source:
-
-```
-M-x package-install RET batppuccin RET
-```
-
-Then load any flavor:
-
-```elisp
-(load-theme 'batppuccin-mocha t)
-```
-
-Or with `use-package`:
-
-```elisp
-(use-package batppuccin
-  :ensure t
-  :config
-  (load-theme 'batppuccin-mocha t))
-```
-
-### package-vc-install
-
-```elisp
-(package-vc-install "https://github.com/bbatsov/batppuccin-emacs")
-(load-theme 'batppuccin-mocha t)
-```
-
-### use-package (with package-vc)
-
-```elisp
-(use-package batppuccin
-  :vc (:url "https://github.com/bbatsov/batppuccin-emacs" :rev :newest)
-  :config
-  (load-theme 'batppuccin-mocha t))
-```
-
-
-### straight.el
-
-```elisp
-(straight-use-package
- '(batppuccin-latte-mocha :host github :repo "bbatsov/batppuccin-emacs"))
-(load-theme 'batppuccin-mocha t)
-```
-
-Or with `use-package` integration.
-
-```elisp
-(use-package batppuccin-mocha
-  :straight (:host github :repo "bbatsov/batppuccin-emacs")
-  :config (load-theme 'batppuccin-mocha t))
-```
-
-### From source
-
-Clone the repo and add it to your load path:
-
-```elisp
-(add-to-list 'custom-theme-load-path "/path/to/batppuccin-emacs")
-(load-theme 'batppuccin-mocha t)
-```
-
-## Flavors
-
-| Flavor | Description |
-|--------|-------------|
-| `batppuccin-mocha` | The darkest variant |
-| `batppuccin-macchiato` | Dark |
-| `batppuccin-frappe` | Medium-dark |
-| `batppuccin-latte` | Light |
-
-<table>
-  <tr>
-    <td align="center"><code>batppuccin-mocha</code><br><img src="screenshots/batppuccin-mocha.png" alt="batppuccin-mocha" width="420"></td>
-    <td align="center"><code>batppuccin-macchiato</code><br><img src="screenshots/batppuccin-macchiato.png" alt="batppuccin-macchiato" width="420"></td>
-  </tr>
-  <tr>
-    <td align="center"><code>batppuccin-frappe</code><br><img src="screenshots/batppuccin-frappe.png" alt="batppuccin-frappe" width="420"></td>
-    <td align="center"><code>batppuccin-latte</code><br><img src="screenshots/batppuccin-latte.png" alt="batppuccin-latte" width="420"></td>
-  </tr>
-</table>
-
-## Customization
-
-Override any color across all flavors:
-
-```elisp
-(setq batppuccin-override-colors-alist
-      '(("bat-base" . "#000000")
-        ("bat-text" . "#ffffff")))
-```
-
-The override alist takes precedence over the built-in palette. Color names match the canonical Catppuccin names with a `bat-` prefix (e.g., `bat-rosewater`, `bat-mauve`, `bat-surface0`).
-
-### Appearance options
-
-A handful of booleans and numbers adjust the look without forking. They all take effect on the next `load-theme` (or `M-x batppuccin-reload`).
-
-Headings in org, outline, markdown, adoc, asciidoc, shr and info are scaled by default. Turn that off for uniform sizes:
-
-```elisp
-(setq batppuccin-scale-headings nil)
-```
-
-Or keep the scaling but tune how much each level grows:
-
-```elisp
-(setq batppuccin-height-doc-title 1.5   ; document titles (default 1.4)
-      batppuccin-height-1 1.4           ; level-1 headings (default 1.3)
-      batppuccin-height-2 1.2           ; level-2 headings (default 1.2)
-      batppuccin-height-3 1.1)          ; level-3 headings (default 1.1)
-```
-
-Render headings in a proportional font, which reads nicely for prose:
-
-```elisp
-(setq batppuccin-use-variable-pitch t)
-```
-
-![Variable-pitch headings, off and on](screenshots/variable-pitch.png)
-
-Comments and docstrings are italic by default. If your font renders italics poorly, turn that off:
-
-```elisp
-(setq batppuccin-italic-comments nil)
-```
-
-Drop the box around the mode line for a flat look:
-
-```elisp
-(setq batppuccin-flat-mode-line t)
-```
-
-![Boxed vs flat mode line](screenshots/flat-mode-line.png)
-
-After changing any of these options, run `M-x batppuccin-reload` to apply them without restarting Emacs.
-
-## Interactive Commands
-
-- `M-x batppuccin-select` - pick a flavor interactively and load it
-- `M-x batppuccin-reload` - reload the current theme after changing options
-- `M-x batppuccin-list-colors` - display all palette colors with samples (prefix arg to pick a variant)
-
-## Programmatic Access
-
-If you need to reference theme colors in your own configuration, there are a couple of options.
-
-Look up a single color:
-
-```elisp
-(batppuccin-get-color "bat-blue")
-```
-
-Or bind the entire palette as local variables with `batppuccin-with-colors`:
-
-```elisp
-(batppuccin-with-colors
-  (set-face-attribute 'some-face nil :foreground bat-blue))
-```
-
-You can also hook into theme loads with `batppuccin-after-load-hook`. Each function receives the theme name as its argument:
-
-```elisp
-(add-hook 'batppuccin-after-load-hook
-          (lambda (_theme)
-            (batppuccin-with-colors
-              (set-face-attribute 'my-face nil :foreground bat-teal))))
-```
-
-## Automatic Light/Dark Switching
-
-Batppuccin pairs well with packages that switch themes based on the time of
-day or your OS appearance setting:
-
-- [auto-dark](https://github.com/LionyxML/auto-dark-emacs) tracks your OS
-  dark/light mode and switches themes to match:
-
-```elisp
-(use-package auto-dark
-  :config
-  (setq auto-dark-themes '((batppuccin-mocha) (batppuccin-latte)))
-  (auto-dark-mode 1))
-```
-
-- [circadian](https://github.com/guidoschmidt/circadian.el) switches on a
-  time-based schedule (e.g. sunrise/sunset):
-
-```elisp
-(use-package circadian
-  :config
-  (setq circadian-themes '((:sunrise . batppuccin-latte)
-                            (:sunset  . batppuccin-mocha)))
-  (circadian-setup))
-```
-
-See [Automatic Light/Dark Theme Switching](https://emacsredux.com/blog/2026/03/29/automatic-light-dark-theme-switching/)
-for a deeper look at both approaches.
-
-## License
-
-GNU General Public License v3.0. See [COPYING](COPYING) for details.
-
-[^1]: Naming is hard, but it should also be fun!
+Iroshizuku is a trademark of Pilot Corporation. This project is not affiliated
+with Pilot.

@@ -1,4 +1,4 @@
-;;; batppuccin-macchiato-theme.el --- Batppuccin theme (Macchiato variant) -*- lexical-binding: t; -*-
+;;; madoromi-natsu-hiru-theme.el --- Madoromi natsu-hiru theme -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2026 Bozhidar Batsov
 
@@ -19,16 +19,20 @@
 
 ;;; Commentary:
 
-;; The "Macchiato" variant of Batppuccin -- dark flavor.
-;; See `batppuccin.el' for the shared infrastructure.
+;; The natsu day / light Madoromi palette.
+;; Derived from Batppuccin; colour design by samhain / the-moonwitch.
+;; See `madoromi.el' for the shared infrastructure.
 
 ;;; Code:
 
-(require 'batppuccin)
+(require 'madoromi)
 
-(deftheme batppuccin-macchiato "A soothing pastel dark theme.")
+(deftheme madoromi-natsu-hiru "Madoromi natsu, day / light.")
 
-(batppuccin--apply-theme 'batppuccin-macchiato batppuccin-macchiato-colors-alist)
+(put 'madoromi-natsu-hiru 'theme-properties
+     '(:kind color-scheme :background-mode light :family madoromi))
+
+(madoromi--apply-theme 'madoromi-natsu-hiru (madoromi-palette 'natsu-hiru))
 
 ;;;###autoload
 (and load-file-name
@@ -37,13 +41,13 @@
                   (file-name-as-directory
                    (file-name-directory load-file-name))))
 
-(provide-theme 'batppuccin-macchiato)
+(provide-theme 'madoromi-natsu-hiru)
 
-(provide 'batppuccin-macchiato-theme)
+(provide 'madoromi-natsu-hiru-theme)
 
 ;; Local Variables:
 ;; no-byte-compile: t
 ;; indent-tabs-mode: nil
 ;; End:
 
-;;; batppuccin-macchiato-theme.el ends here
+;;; madoromi-natsu-hiru-theme.el ends here

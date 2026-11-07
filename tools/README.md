@@ -1,7 +1,7 @@
 # Screenshot tooling
 
 Regenerates the per-flavor screenshots in [`../screenshots/`](../screenshots)
-that the main README links to.
+for this fork. Upstream Batppuccin previews were removed; run this to create Madoromi previews.
 
 ```console
 $ tools/generate.sh

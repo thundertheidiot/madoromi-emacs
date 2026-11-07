@@ -1,6 +1,10 @@
 # Byte-compiled Emacs Lisp
 *.elc
 
+# Python palette generator/tests
+__pycache__/
+*.py[cod]
+
 # Package archives
 *.tar
 

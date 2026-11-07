@@ -1,4 +1,4 @@
-;;; batppuccin-mocha-theme.el --- Batppuccin theme (Mocha variant) -*- lexical-binding: t; -*-
+;;; madoromi-haru-yoru-theme.el --- Madoromi haru-yoru theme -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2026 Bozhidar Batsov
 
@@ -19,16 +19,20 @@
 
 ;;; Commentary:
 
-;; The "Mocha" variant of Batppuccin -- the darkest flavor.
-;; See `batppuccin.el' for the shared infrastructure.
+;; The haru night / dark Madoromi palette.
+;; Derived from Batppuccin; colour design by samhain / the-moonwitch.
+;; See `madoromi.el' for the shared infrastructure.
 
 ;;; Code:
 
-(require 'batppuccin)
+(require 'madoromi)
 
-(deftheme batppuccin-mocha "A soothing pastel dark theme.")
+(deftheme madoromi-haru-yoru "Madoromi haru, night / dark.")
 
-(batppuccin--apply-theme 'batppuccin-mocha batppuccin-mocha-colors-alist)
+(put 'madoromi-haru-yoru 'theme-properties
+     '(:kind color-scheme :background-mode dark :family madoromi))
+
+(madoromi--apply-theme 'madoromi-haru-yoru (madoromi-palette 'haru-yoru))
 
 ;;;###autoload
 (and load-file-name
@@ -37,13 +41,13 @@
                   (file-name-as-directory
                    (file-name-directory load-file-name))))
 
-(provide-theme 'batppuccin-mocha)
+(provide-theme 'madoromi-haru-yoru)
 
-(provide 'batppuccin-mocha-theme)
+(provide 'madoromi-haru-yoru-theme)
 
 ;; Local Variables:
 ;; no-byte-compile: t
 ;; indent-tabs-mode: nil
 ;; End:
 
-;;; batppuccin-mocha-theme.el ends here
+;;; madoromi-haru-yoru-theme.el ends here

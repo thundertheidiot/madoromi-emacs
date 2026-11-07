@@ -19,9 +19,9 @@ SAMPLE="${1:-$TOOLS_DIR/sample.el}"
 OUT_DIR="$REPO_DIR/screenshots"
 EMACS="${EMACS:-emacs}"
 
-GEOM=/tmp/batppuccin-shot-geom.txt
-BG=/tmp/batppuccin-shot-bg.txt
-READY=/tmp/batppuccin-shot-ready.txt
+GEOM=/tmp/madoromi-shot-geom.txt
+BG=/tmp/madoromi-shot-bg.txt
+READY=/tmp/madoromi-shot-ready.txt
 
 mkdir -p "$OUT_DIR"
 
@@ -32,13 +32,13 @@ for f in "$REPO_DIR"/*-theme.el; do
 done
 
 shoot() {
-  local theme="$1" out="$2"
-  pkill -i emacs 2>/dev/null || true
+  local theme="$1" out="$2" emacs_pid
   sleep 1
   rm -f "$GEOM" "$BG" "$READY"
 
   SHOT_THEME="$theme" SHOT_THEMEDIR="$REPO_DIR" SHOT_FILE="$SAMPLE" \
     "$EMACS" -Q --eval "(load \"$TOOLS_DIR/screenshot.el\")" >/dev/null 2>&1 &
+  emacs_pid=$!
 
   local i
   for ((i = 0; i < 40; i++)); do
@@ -47,7 +47,8 @@ shoot() {
   done
   if [ ! -f "$READY" ]; then
     echo "ERROR: $theme frame never became ready" >&2
-    pkill -i emacs 2>/dev/null || true
+    kill "$emacs_pid" 2>/dev/null || true
+    wait "$emacs_pid" 2>/dev/null || true
     return 1
   fi
 
@@ -70,7 +71,8 @@ shoot() {
       if [ "$d" -le 60 ]; then
         magick "$tmp" -strip "$out"
         rm -f "$tmp"
-        pkill -i emacs 2>/dev/null || true
+        kill "$emacs_pid" 2>/dev/null || true
+        wait "$emacs_pid" 2>/dev/null || true
         echo "  $theme -> $(basename "$out")"
         return 0
       fi
@@ -79,7 +81,8 @@ shoot() {
   done
 
   rm -f "$tmp"
-  pkill -i emacs 2>/dev/null || true
+  kill "$emacs_pid" 2>/dev/null || true
+  wait "$emacs_pid" 2>/dev/null || true
   echo "ERROR: $theme never matched theme background $bg" >&2
   return 1
 }

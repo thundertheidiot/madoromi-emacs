@@ -1,11 +1,11 @@
-;;; screenshot.el --- clean frame for Batppuccin screenshots -*- lexical-binding: t; -*-
+;;; screenshot.el --- clean frame for Madoromi screenshots -*- lexical-binding: t; -*-
 
 ;; Loaded by tools/generate.sh inside a throwaway `emacs -Q' to render one
 ;; theme variant against a sample buffer, then publish the frame geometry so
 ;; the shell can capture just that window.  macOS only.
 
 ;; Parameters arrive through the environment:
-;;   SHOT_THEME     theme to load, e.g. batppuccin-latte
+;;   SHOT_THEME     theme to load, e.g. madoromi-haru-hiru
 ;;   SHOT_THEMEDIR  directory holding the theme files
 ;;   SHOT_FILE      sample source file to display
 ;;   SHOT_FONT      font family (optional; falls back to a sensible default)
@@ -54,7 +54,7 @@
 ;; frame that floats above other windows so the region capture grabs it.
 (set-frame-size (selected-frame) 92 36)
 (set-frame-position (selected-frame) 60 60)
-(let ((appearance (if (string-match-p "day\\|latte\\|light" (symbol-name shot-theme))
+(let ((appearance (if (string-match-p "hiru" (symbol-name shot-theme))
                       'light 'dark)))
   (modify-frame-parameters
    (selected-frame)
@@ -83,10 +83,10 @@
   (let ((inhibit-message t) (message-log-max nil)
         (e (frame-edges (selected-frame) 'outer-edges)))
     (write-region (format "%s %s %s %s\n" (nth 0 e) (nth 1 e) (nth 2 e) (nth 3 e))
-                  nil "/tmp/batppuccin-shot-geom.txt" nil)
+                  nil "/tmp/madoromi-shot-geom.txt" nil)
     (write-region (format "%s\n" (face-background 'default))
-                  nil "/tmp/batppuccin-shot-bg.txt" nil)
-    (write-region "ready\n" nil "/tmp/batppuccin-shot-ready.txt" nil)))
+                  nil "/tmp/madoromi-shot-bg.txt" nil)
+    (write-region "ready\n" nil "/tmp/madoromi-shot-ready.txt" nil)))
 
 (run-with-timer 1.2 nil (lambda () (shot-activate) (shot-publish)))
 

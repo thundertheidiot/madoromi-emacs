@@ -1,11 +1,5 @@
-name: CI
-
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-
+name: Compile and palettes
+on: [push, pull_request]
 jobs:
   byte-compile:
     runs-on: ubuntu-latest
@@ -14,18 +8,19 @@ jobs:
         emacs-version: ['27.1', '28.2', '29.4', '30.1', 'snapshot']
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
       - uses: purcell/setup-emacs@master
         with:
           version: ${{ matrix.emacs-version }}
-      - name: Byte-compile shared library
+      - name: Check palette generation
         run: |
-          emacs --batch -L . \
-            --eval "(setq byte-compile-error-on-warn t)" \
-            -f batch-byte-compile batppuccin.el
+          python3 tools/generate-palettes.py --check
+          python3 -m unittest discover -s test -p 'test_*.py' -v
+      - name: Byte-compile shared libraries
+        run: |
+          emacs -Q --batch -L . --eval "(setq byte-compile-error-on-warn t)" -f batch-byte-compile madoromi-palette.el madoromi.el
       - name: Load all themes
         run: |
-          emacs --batch -L . \
-            -l batppuccin-mocha-theme.el \
-            -l batppuccin-macchiato-theme.el \
-            -l batppuccin-frappe-theme.el \
-            -l batppuccin-latte-theme.el
+          emacs -Q --batch -L . -l madoromi-haru-hiru-theme.el -l madoromi-haru-yoru-theme.el -l madoromi-natsu-hiru-theme.el -l madoromi-natsu-yoru-theme.el -l madoromi-aki-hiru-theme.el -l madoromi-aki-yoru-theme.el -l madoromi-fuyu-hiru-theme.el -l madoromi-fuyu-yoru-theme.el

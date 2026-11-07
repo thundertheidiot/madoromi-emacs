@@ -1,4 +1,4 @@
-name: CI
+name: Emacs regression tests
 
 on:
   push:
